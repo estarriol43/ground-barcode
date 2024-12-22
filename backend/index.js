@@ -16,6 +16,10 @@ var codeList = [
   ['9', '10', '11']
 ];
 
+const removeItem = (array, valueToRemove) => {
+  return array.filter(item => item !== valueToRemove);
+};
+
 var udpPort = new osc.UDPPort({
   localAddress: "0.0.0.0",
   localPort: process.env.LOCAL_OSC_PORT,
@@ -25,10 +29,14 @@ var udpPort = new osc.UDPPort({
 udpPort.on("message", function (oscMsg, timeTag, info) {
   console.log("An OSC message just arrived!", oscMsg);
   console.log(oscMsg.address)
+  console.log(oscMsg.args[0]['value'])
 
   switch (oscMsg.address) {
   case '/start/part':
     part = Number(oscMsg.args[0]['value']);
+    break;
+  case '/delete':
+    codeList[part] = removeItem(codeList[part], oscMsg.args[0]['value'])
     break;
   default:
     console.log(`Unknown Address`);
@@ -52,7 +60,6 @@ app.get('/api/part', (req, res) => {
 });
 
 app.get('/api/codelist', (req, res) => {
-  console.log(`GET /api/codelist`)
   res.json({ value: codeList[part] });
 });
 
