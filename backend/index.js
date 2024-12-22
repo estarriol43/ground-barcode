@@ -8,6 +8,14 @@ require('dotenv').config()
 
 var part = 0;
 
+var codeList = [
+  [],
+  ['1', '2', '3'],
+  ['3', '4', '5'],
+  ['6', '7', '8'],
+  ['9', '10', '11']
+];
+
 var udpPort = new osc.UDPPort({
   localAddress: "0.0.0.0",
   localPort: process.env.LOCAL_OSC_PORT,
@@ -41,6 +49,11 @@ app.use('/images', express.static(image_path));
 
 app.get('/api/part', (req, res) => {
   res.json({ value: part });
+});
+
+app.get('/api/codelist', (req, res) => {
+  console.log(`GET /api/codelist`)
+  res.json({ value: codeList[part] });
 });
 
 (async function() {
