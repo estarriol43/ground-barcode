@@ -10,11 +10,60 @@ var part = 0;
 
 var codeList = [
   [],
-  ['1', '2', '3'],
-  ['3', '4', '5'],
-  ['6', '7', '8'],
-  ['9', '10', '11']
+  [
+    "m3f-r.svg",
+    "mc-d.svg", "mc-s.svg", "mc-u.svg",
+    "pd-f.svg", "pd-n.svg",
+    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
+    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
+    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
+  ],
+  [
+    "m3f-r.svg",
+    "mc-d.svg", "mc-s.svg", "mc-u.svg",
+    "pd-f.svg", "pd-n.svg",
+    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
+    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
+    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
+  ],
+  [
+    "m3f-r.svg",
+    "mc-d.svg", "mc-s.svg", "mc-u.svg",
+    "pd-f.svg", "pd-n.svg",
+    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
+    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
+    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
+  ],
+  [
+    "m3f-r.svg",
+    "mc-d.svg", "mc-s.svg", "mc-u.svg",
+    "pd-f.svg", "pd-n.svg",
+    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
+    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
+    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
+  ],
 ];
+
+const osc2barcode = {
+  "/vocal/1/play bang": "v1p-b.svg",
+  "/vocal/2/play bang": "v2p-b.svg",
+  "/vocal/3/play bang": "v3p-b.svg",
+  "/vocal/4/play bang": "v4p-b.svg",
+  "/vocal/5/play bang": "v5p-b.svg",
+  "/vocal/6/play bang": "v6p-b.svg",
+  "/vocal/7/play bang": "v7p-b.svg",
+  "/vocal/8/play bang": "v8p-b.svg",
+  "/main/circling up":  "mc-u.svg",
+  "/main/circling down": "mc-d.svg",
+  "/main/circling steady": "mc-s.svg",
+  "/mic3/filter random": "m3f-r.svg",
+  "/percussion/d near": "pd-n.svg",
+  "/percussion/d far": "pd-f.svg",
+  "/synth/z up": "syz-u.svg",
+  "/synth/z down": "syz-d.svg",
+  "/synth/d near": "syd-n.svg",
+  "/synth/d far": "syd-f.svg",
+}
 
 const removeItem = (array, valueToRemove) => {
   return array.filter(item => item !== valueToRemove);
@@ -28,15 +77,13 @@ var udpPort = new osc.UDPPort({
 
 udpPort.on("message", function (oscMsg, timeTag, info) {
   console.log("An OSC message just arrived!", oscMsg);
-  console.log(oscMsg.address)
-  console.log(oscMsg.args[0]['value'])
 
   switch (oscMsg.address) {
   case '/start/part':
     part = Number(oscMsg.args[0]['value']);
     break;
   case '/delete':
-    codeList[part] = removeItem(codeList[part], oscMsg.args[0]['value'])
+    codeList[part] = removeItem(codeList[part], osc2barcode[oscMsg.args[0]['value']])
     break;
   default:
     console.log(`Unknown Address`);
