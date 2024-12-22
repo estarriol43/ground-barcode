@@ -1,9 +1,35 @@
 const https = require("https");
 const express = require("express");
 const ngrok = require('ngrok');
+const osc = require('osc');
 
 // Configuration
 require('dotenv').config()
+
+var part = 0;
+
+var udpPort = new osc.UDPPort({
+  localAddress: "0.0.0.0",
+  localPort: process.env.LOCAL_OSC_PORT,
+  metadata: true
+});
+
+udpPort.on("message", function (oscMsg, timeTag, info) {
+  console.log("An OSC message just arrived!", oscMsg);
+  console.log(oscMsg.address)
+
+  switch (oscMsg.address) {
+  case '/start/part':
+    part = Number(oscMsg.args[0]['value']);
+    break;
+  default:
+    console.log(`Unknown Address`);
+}
+});
+
+udpPort.open();
+
+console.log(`OSC listening on port ${process.env.LOCAL_OSC_PORT}!`);
 
 const app = express();
 const app_path = __dirname + '/../frontend/build';
@@ -13,8 +39,8 @@ const image_path = __dirname + '/images';
 app.use("/", express.static(app_path));
 app.use('/images', express.static(image_path));
 
-app.get('/api/image', (req, res) => {
-  res.json({ imageUrl: `${process.env.HOST_URL}/images/fuck.jpg` });
+app.get('/api/part', (req, res) => {
+  res.json({ value: part });
 });
 
 (async function() {
