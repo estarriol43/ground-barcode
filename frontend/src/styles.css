@@ -14,6 +14,6 @@ body {
 
 .scattered-image {
     position: absolute;
-    width: 10vw; /* Adjust the size of images */
+    width: 15vw; /* Adjust the size of images */
     height: auto;
 }

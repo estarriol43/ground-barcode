@@ -8,32 +8,62 @@ require('dotenv').config()
 
 var part = 0;
 
-var codeList = [
-  [
-    "start-b.svg"
-  ],
-  [
-    "m3f-r.svg",
-    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
-    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
-    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
-  ],
-  [
-    "m3f-r.svg",
-    "mc-d.svg", "mc-s.svg", "mc-u.svg",
-    "pd-f.svg", "pd-n.svg",
-    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
-    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
-    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
-  ],
-  [
-    "m3f-r.svg",
-    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
-  ],
-  [
-    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
-    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
-  ],
+var codeFreq = [
+  {
+    "start-b.svg": 1
+  },
+  {
+    "m3f-r.svg" : 1,
+    "syd-f.svg" : 1,
+    "syd-n.svg" : 1,
+    "syz-d.svg" : 1,
+    "syz-u.svg" : 1,
+    "v1p-b.svg" : 1,
+    "v2p-b.svg" : 1,
+    "v3p-b.svg" : 1,
+    "v4p-b.svg" : 1,
+    "v5p-b.svg" : 1,
+    "v6p-b.svg" : 1,
+    "v7p-b.svg" : 1,
+    "v8p-b.svg" : 1,
+  },
+  {
+    "m3f-r.svg" : 1,
+    "mc-d.svg"  : 1,
+    "mc-s.svg"  : 1,
+    "mc-u.svg"  : 1,
+    "pd-f.svg"  : 1,
+    "pd-n.svg"  : 1,
+    "syd-f.svg" : 1,
+    "syd-n.svg" : 1,
+    "syz-d.svg" : 1,
+    "syz-u.svg" : 1,
+    "v1p-b.svg" : 1,
+    "v2p-b.svg" : 1,
+    "v3p-b.svg" : 1,
+    "v4p-b.svg" : 1,
+    "v5p-b.svg" : 1,
+    "v6p-b.svg" : 1,
+    "v7p-b.svg" : 1,
+    "v8p-b.svg" : 1,
+  },
+  {
+    "m3f-r.svg" : 1,
+    "syd-f.svg" : 1,
+    "syd-n.svg" : 1,
+    "syz-d.svg" : 1,
+    "syz-u.svg" : 1,
+  },
+  {
+    "v1p-b.svg" : 1,
+    "v2p-b.svg" : 1,
+    "v3p-b.svg" : 1,
+    "v4p-b.svg" : 1,
+    "v5p-b.svg" : 1,
+    "v6p-b.svg" : 1,
+    "v7p-b.svg" : 1,
+    "v8p-b.svg" : 1,
+  },
 ];
 
 const osc2barcode = {
@@ -59,10 +89,6 @@ const osc2barcode = {
   "/synth/d far": "syd-f.svg",
 }
 
-const removeItem = (array, valueToRemove) => {
-  return array.filter(item => item !== valueToRemove);
-};
-
 var udpPort = new osc.UDPPort({
   localAddress: "0.0.0.0",
   localPort: process.env.GROUND_OSC_PORT,
@@ -77,7 +103,7 @@ udpPort.on("message", function (oscMsg, timeTag, info) {
     part = Number(oscMsg.args[0]['value']);
     break;
   case '/delete':
-    codeList[part] = removeItem(codeList[part], osc2barcode[oscMsg.args[0]['value']])
+      delete codeFreq[part][osc2barcode[oscMsg.args[0]['value']]];
     break;
   default:
     console.log(`Unknown Address`);
@@ -101,7 +127,7 @@ app.get('/api/part', (req, res) => {
 });
 
 app.get('/api/codelist', (req, res) => {
-  res.json({ value: codeList[part] });
+  res.json({ value: codeFreq[part] });
 });
 
 (async function() {

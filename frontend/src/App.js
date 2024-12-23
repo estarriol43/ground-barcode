@@ -3,8 +3,8 @@ import ScatteredImages from './scatter-images';
 
 function App() {
   const [part, setPart] = useState('');
-  const [codeList, setCodeList] = useState('');
-  const [codeListLen, setCodeListLen] = useState('');
+  const [codeFreq, setCodeFreq] = useState('');
+  const [codeFreqLen, setCodeFreqLen] = useState('');
 
   useEffect(() => {
     const fetchPart = async () => {
@@ -28,33 +28,33 @@ function App() {
   useEffect(() => {
     console.log(`Part: ${part}`);
 
-    const fetchCodeList = async () => {
+    const fetchCodeFreq = async () => {
       try {
         // Replace with your backend API endpoint
         const response = await fetch(`${process.env.REACT_APP_HOST_URL}/api/codelist`);
         const data = await response.json();
-        setCodeList(data.value);
-        setCodeListLen(data.value.length);
+        setCodeFreq(data.value);
+        setCodeFreqLen(Object.keys(data.value).length);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    fetchCodeList();
-    const interval = setInterval(fetchCodeList, 100);
+    fetchCodeFreq();
+    const interval = setInterval(fetchCodeFreq, 100);
 
     return () => clearInterval(interval); // Cleanup on component unmount
 
   }, [part]);
 
   useEffect(() => {
-    console.log(`codeList: ${codeList}`);
-  }, [codeListLen]);
+    console.log(`codeFreq: ${codeFreq}`);
+  }, [codeFreqLen]);
 
   return (
     <div style={{ textAlign: 'center' }}>
       <h1> Part {part} </h1>
-      <ScatteredImages codeList={codeList} codeListLen={codeListLen} part={part}/>
+      <ScatteredImages codeFreq={codeFreq} codeFreqLen={codeFreqLen} part={part}/>
     </div>
   );
 }
