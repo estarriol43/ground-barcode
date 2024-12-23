@@ -1,22 +1,19 @@
-#scanner-container {
-  text-align: center;
-  margin: auto;
-  max-width: 600px;
+body {
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    background-color: #f0f0f0;
+    position: relative;
 }
 
-#scanner {
-  width: 100%;
-  height: 400px;
+.scattered-images-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-#barcode-result {
-  margin-top: 20px;
-  font-size: 1.5em;
-  color: white;
-}
-
-.server-response {
-  margin-top: 20px;
-  font-size: 1em;
-  color: white;
+.scattered-image {
+    position: absolute;
+    width: 10vw; /* Adjust the size of images */
+    height: auto;
 }

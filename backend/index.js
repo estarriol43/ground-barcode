@@ -6,14 +6,14 @@ const osc = require('osc');
 // Configuration
 require('dotenv').config()
 
-var part = 0;
+var part = 1;
 
 var codeList = [
-  [],
+  [
+    "start-b.svg"
+  ],
   [
     "m3f-r.svg",
-    "mc-d.svg", "mc-s.svg", "mc-u.svg",
-    "pd-f.svg", "pd-n.svg",
     "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
     "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
     "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
@@ -28,23 +28,16 @@ var codeList = [
   ],
   [
     "m3f-r.svg",
-    "mc-d.svg", "mc-s.svg", "mc-u.svg",
-    "pd-f.svg", "pd-n.svg",
     "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
-    "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
-    "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
   ],
   [
-    "m3f-r.svg",
-    "mc-d.svg", "mc-s.svg", "mc-u.svg",
-    "pd-f.svg", "pd-n.svg",
-    "syd-f.svg", "syd-n.svg", "syz-d.svg", "syz-u.svg",
     "v1p-b.svg", "v2p-b.svg", "v3p-b.svg", "v4p-b.svg",
     "v5p-b.svg", "v6p-b.svg", "v7p-b.svg", "v8p-b.svg"
   ],
 ];
 
 const osc2barcode = {
+  "/start": "start-b.svg",
   "/vocal/1/play bang": "v1p-b.svg",
   "/vocal/2/play bang": "v2p-b.svg",
   "/vocal/3/play bang": "v3p-b.svg",
@@ -71,7 +64,7 @@ const removeItem = (array, valueToRemove) => {
 
 var udpPort = new osc.UDPPort({
   localAddress: "0.0.0.0",
-  localPort: process.env.LOCAL_OSC_PORT,
+  localPort: process.env.GROUND_OSC_PORT,
   metadata: true
 });
 
@@ -92,7 +85,7 @@ udpPort.on("message", function (oscMsg, timeTag, info) {
 
 udpPort.open();
 
-console.log(`OSC listening on port ${process.env.LOCAL_OSC_PORT}!`);
+console.log(`OSC listening on port ${process.env.GROUND_OSC_PORT}!`);
 
 const app = express();
 const app_path = __dirname + '/../frontend/build';
