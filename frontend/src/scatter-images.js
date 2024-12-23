@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 
-const numImage = 20;
-var codeList = []
+const numImage = 50;
+const imageSize = window.innerWidth * 0.1;
+var codeList = [];
 
 const ScatteredImages = ({ codeFreq, codeFreqLen, part }) => {
     const [images, setImages] = useState([]);
@@ -13,8 +14,22 @@ const ScatteredImages = ({ codeFreq, codeFreqLen, part }) => {
         console.log(`createScatteredImages`);
 
         for (let i = 0; i < codeList.length; i++) {
-            const x = Math.random() * window.innerWidth * 0.80;
-            const y = Math.random() * window.innerHeight * 0.80;
+            let isOverlapping = false;
+            let attempts = 0;
+            let x, y;
+
+            do {
+                x = Math.random() * window.innerWidth;
+                y = Math.random() * window.innerHeight;
+                isOverlapping = scatteredImages.some(img => {
+                    const distance = Math.sqrt(
+                        Math.pow(img.x - x, 2) + Math.pow(img.y - y, 2)
+                    );
+                    return distance < imageSize;
+                });
+                attempts++;
+            } while (isOverlapping && attempts < 5);
+
             const rotation = Math.random() * 360;
             const src = `/images/${codeList[i]}`;
 
