@@ -6,7 +6,7 @@ const osc = require('osc');
 // Configuration
 require('dotenv').config()
 
-var part = 1;
+var part = 0;
 
 var codeList = [
   [
@@ -38,6 +38,7 @@ var codeList = [
 
 const osc2barcode = {
   "/start": "start-b.svg",
+  "/start bang": "start-b.svg",
   "/vocal/1/play bang": "v1p-b.svg",
   "/vocal/2/play bang": "v2p-b.svg",
   "/vocal/3/play bang": "v3p-b.svg",
